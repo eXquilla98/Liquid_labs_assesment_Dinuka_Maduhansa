@@ -4,6 +4,7 @@ DB_name = "market_data.db"
 
 def get_db_connection():
     conn = sqlite3.connect(DB_name)
+    return conn
 
 
 def init_db():
