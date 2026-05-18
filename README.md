@@ -129,5 +129,3 @@ Use the Swagger UI or curl to test:
 ```powershell
 curl "http://127.0.0.1:8000/symbols/AAPL/annual/2024"
 ```
-
-If you want to add more examples, use other valid symbols such as `IBM`, `MSFT`, or `GOOGL`.
