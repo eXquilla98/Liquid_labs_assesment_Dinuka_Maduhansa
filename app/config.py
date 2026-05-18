@@ -1,6 +1,9 @@
-# app/config.py
-
 import os
+from pathlib import Path
+from dotenv import load_dotenv
+
+env_path = Path(__file__).resolve().with_name(".env")
+load_dotenv(env_path)
 
 API_KEY = os.getenv("ALPHA_API_KEY")
 

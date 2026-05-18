@@ -1,11 +1,6 @@
-# app/clients/alpha_client.py
-
 import os
 import requests
-from dotenv import load_dotenv
 from app.config import BASE_URL, API_KEY
-
-load_dotenv()
 
 base_url = BASE_URL
 
