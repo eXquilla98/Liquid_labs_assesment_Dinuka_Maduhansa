@@ -5,6 +5,15 @@ from app.service.market_service import get_annual_data
 router = APIRouter()
 
 
+@router.get("/")
+def root():
+    return {
+        "message": "Market Data API is running.",
+        "documentation": "/docs",
+        "example_endpoint": "/symbols/AAPL/annual/2024"
+    }
+
+
 @router.get("/symbols/{symbol}/annual/{year}", response_model=AnnualDataResponse)
 def get_symbol_annual(symbol: str, year: int):
     if len(symbol) > 10:
