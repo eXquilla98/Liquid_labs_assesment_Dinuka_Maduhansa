@@ -34,12 +34,16 @@ def fetch_monthly_data(symbol: str):
     try:
         data = response.json()
     except ValueError as exc:
-        logger.error("Failed to parse JSON from Alpha Vantage for %s: %s", symbol, exc)
+        logger.error(
+            "Failed to parse JSON from Alpha Vantage for %s: %s", symbol, exc)
         raise RuntimeError("Invalid response from external API") from exc
 
     if "Monthly Time Series" not in data:
-        logger.error("Unexpected Alpha Vantage payload for %s: %s", symbol, data)
-        raise RuntimeError("Invalid response from external API")
+        error_detail = data.get("Error Message") or data.get("Note") or data
+        logger.error("Unexpected Alpha Vantage payload for %s: %s",
+                     symbol, error_detail)
+        raise RuntimeError(
+            f"Invalid response from external API: {error_detail}")
 
     time_series = data["Monthly Time Series"]
     parsed_data = []
