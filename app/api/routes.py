@@ -1,7 +1,10 @@
+import logging
+
 from fastapi import APIRouter, HTTPException
 from app.models.schemas import AnnualDataResponse
 from app.service.market_service import get_annual_data
 
+logger = logging.getLogger(__name__)
 router = APIRouter()
 
 
@@ -17,14 +20,21 @@ def root():
 @router.get("/symbols/{symbol}/annual/{year}", response_model=AnnualDataResponse)
 def get_symbol_annual(symbol: str, year: int):
     if len(symbol) > 10:
+        logger.warning("Invalid symbol length: %s", symbol)
         raise HTTPException(status_code=400, detail="Invalid symbol")
 
     if year < 1900 or year > 2100:
+        logger.warning("Invalid year requested: %s", year)
         raise HTTPException(status_code=400, detail="Invalid year")
+
     try:
         result = get_annual_data(symbol, year)
+        logger.info("Returning annual stats for %s %s", symbol, year)
         return result
     except ValueError as e:
+        logger.warning("Client error for %s %s: %s", symbol, year, e)
         raise HTTPException(status_code=400, detail=str(e))
-    except Exception:
+    except Exception as exc:
+        logger.exception(
+            "Unexpected error while processing request for %s %s", symbol, year)
         raise HTTPException(status_code=500, detail="Internal server error")
